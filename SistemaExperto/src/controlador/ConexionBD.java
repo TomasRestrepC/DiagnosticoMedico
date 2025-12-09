@@ -17,7 +17,7 @@ public class ConexionBD {
     // Configura estas variables con tus datos de MySQL
     private static final String URL = "jdbc:mysql://localhost:3306/DiagnosticoMedico";
     private static final String USER = "root";       
-    private static final String PASSWORD = "TRC12345"; 
+    private static final String PASSWORD = "root"; 
     
     public Connection conectar() {
         Connection con = null;
