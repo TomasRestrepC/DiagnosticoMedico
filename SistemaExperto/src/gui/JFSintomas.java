@@ -7,6 +7,10 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JCheckBox;
+import controlador.GestorDiagnostico;
+import models.Paciente;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 
 /**
  *
@@ -14,29 +18,71 @@ import javax.swing.JCheckBox;
  */
 public class JFSintomas extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFSintomas.class.getName());
+private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFSintomas.class.getName());
     private String nombrePaciente;
     private int edadPaciente;
     private List<JCheckBox> listaCheckBoxes = new ArrayList<>();
+    private javax.swing.JPanel panelCheckboxes; 
+    private javax.swing.JCheckBox chkFiebre;
+    private javax.swing.JCheckBox chkTos;
+    private javax.swing.JCheckBox chkDolorCabeza;
+    private javax.swing.JCheckBox chkErupcion;
+    private javax.swing.JTextArea txtAreaResultados; 
+    private javax.swing.JScrollPane scrollResultados;
     
     public JFSintomas() {
         initComponents();
+        inicializarComponentesPersonalizados();
     }
     public JFSintomas(String nombre, int edad) {
         initComponents();
+        inicializarComponentesPersonalizados();
         this.nombrePaciente = nombre;
         this.edadPaciente = edad;
 
         // cargarSintomas();
     }
     
-
-    
-//    cargarSintomas(){
+    private void inicializarComponentesPersonalizados() {
         
-  //  }
+        // --- 1. Inicializar Checkboxes ---
+        chkFiebre = new javax.swing.JCheckBox("Fiebre");
+        chkTos = new javax.swing.JCheckBox("Tos");
+        chkDolorCabeza = new javax.swing.JCheckBox("Dolor de Cabeza");
+        chkErupcion = new javax.swing.JCheckBox("Erupción");
+        
+        // Almacenar en la lista para futuras extensiones (opcional)
+        listaCheckBoxes.add(chkFiebre);
+        listaCheckBoxes.add(chkTos);
+        listaCheckBoxes.add(chkDolorCabeza);
+        listaCheckBoxes.add(chkErupcion);
+        
+        // --- 2. Crear Panel Contenedor de Síntomas ---
+        panelCheckboxes = new JPanel();
+        panelCheckboxes.setLayout(new BoxLayout(panelCheckboxes, BoxLayout.Y_AXIS)); // Layout Vertical
+        
+        // Agregar los checkboxes al panel
+        for (JCheckBox chk : listaCheckBoxes) {
+            panelCheckboxes.add(chk);
+        }
+        
+        // Establecer el panel de checkboxes dentro del JScrollPane de síntomas
+        panelSintomas.setViewportView(panelCheckboxes);
+        
+        
+        // --- 3. Inicializar Área de Resultados (TAREA 2) ---
+        txtAreaResultados = new javax.swing.JTextArea();
+        scrollResultados = new javax.swing.JScrollPane();
+        
+        txtAreaResultados.setColumns(20);
+        txtAreaResultados.setRows(5);
+        txtAreaResultados.setEditable(false);
+        scrollResultados.setViewportView(txtAreaResultados);
+        
+        // Añadir el scrollResultados al layout de la ventana
 
-
+    }
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,9 +126,9 @@ public class JFSintomas extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addComponent(panelSintomas, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDiagnosticar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
         );
@@ -91,7 +137,37 @@ public class JFSintomas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDiagnosticarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiagnosticarActionPerformed
-        // TODO add your handling code here:
+        // --- TAREA 1: Ingreso de información del paciente (Recolección) ---
+        int id = 1; 
+        models.Paciente paciente = new models.Paciente(id, this.nombrePaciente, this.edadPaciente);
+        
+        // --- TAREA 1: Permitir seleccionar los síntomas (Recolección) ---
+        List<String> sintomasSeleccionados = new java.util.ArrayList<>();
+        
+        // **RECOLECCIÓN DE SÍNTOMAS:** Los nombres deben coincidir con la BD (minúsculas, guiones bajos)
+        if (chkFiebre.isSelected()) {
+            sintomasSeleccionados.add("fiebre");
+        }
+        if (chkTos.isSelected()) {
+            sintomasSeleccionados.add("tos");
+        }
+        if (chkDolorCabeza.isSelected()) {
+            sintomasSeleccionados.add("dolor_cabeza");
+        }
+        if (chkErupcion.isSelected()) {
+            sintomasSeleccionados.add("erupcion");
+        }
+        
+        // --- TAREA 2: Generación de Diagnóstico (Llamada a la lógica) ---
+        GestorDiagnostico gestor = new GestorDiagnostico(); 
+        
+        gestor.cargarBaseConocimiento(); 
+        
+        // Obtener el diagnóstico (Llama a guardarHistorial internamente - Tarea 3)
+        String resultado = gestor.obtenerDiagnostico(paciente, sintomasSeleccionados);
+        
+        // Mostrar el resultado en el JTextArea
+        txtAreaResultados.setText(resultado);
     }//GEN-LAST:event_btnDiagnosticarActionPerformed
 
     /**
