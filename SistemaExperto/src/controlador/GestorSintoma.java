@@ -36,33 +36,6 @@ public class GestorSintoma {
     return lista;
 }
 
-
-    // Agregar una nueva enfermedad y devolver su ID
-    public int agregarEnfermedad(String nombre, String categoria, String recomendacion) {
-        String sql = "INSERT INTO enfermedades (nombre, categoria, recomendacion) VALUES (?, ?, ?)";
-
-        try (Connection con = new ConexionBD().conectar();
-             PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            pst.setString(1, nombre);
-            pst.setString(2, categoria);
-            pst.setString(3, recomendacion);
-
-            pst.executeUpdate();
-
-            ResultSet rs = pst.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);  // ID autogenerado
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Error agregando enfermedad: " + e.getMessage());
-        }
-
-        return -1;
-    }
-
-    // Insertar los síntomas de esta enfermedad
     public void agregarSintomas(int idEnfermedad, List<String> sintomas) {
 
         String sql = "INSERT INTO sintomas_enfermedad (enfermedad_id, sintoma) VALUES (?, ?)";
@@ -80,4 +53,20 @@ public class GestorSintoma {
             System.out.println("Error agregando síntomas: " + e.getMessage());
         }
     }
+    
+    public boolean agregarNuevoSintoma(String sintoma) {
+        String sql = "INSERT INTO sintomas_enfermedad (enfermedad_id, sintoma) VALUES (NULL, ?)";
+
+        try (Connection con = new ConexionBD().conectar();
+            PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, sintoma);
+            pst.executeUpdate();
+            return true;
+
+        }catch (SQLException e) {
+        System.out.println("Error agregando síntoma: " + e.getMessage());
+        return false;
+    }
+}
+
 }

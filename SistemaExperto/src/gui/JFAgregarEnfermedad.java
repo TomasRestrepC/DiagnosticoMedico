@@ -4,6 +4,7 @@
  */
 package gui;
 
+import controlador.GestorEnfermedad;
 import controlador.GestorSintoma;
 import java.awt.GridLayout;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class JFAgregarEnfermedad extends javax.swing.JFrame {
        
+    private GestorEnfermedad controlador2 = new GestorEnfermedad();
     private GestorSintoma controlador = new GestorSintoma();
     private List<JCheckBox> listaChecks = new ArrayList<>();
     
@@ -229,7 +231,7 @@ public class JFAgregarEnfermedad extends javax.swing.JFrame {
             return;
         }
 
-        int id = controlador.agregarEnfermedad(nombre, categoria, recomendacion);
+        int id = controlador2.agregarEnfermedad(nombre, categoria, recomendacion);
 
         if (id != -1) {
             controlador.agregarSintomas(id, sintomasSeleccionados);

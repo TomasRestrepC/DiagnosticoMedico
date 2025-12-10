@@ -50,6 +50,7 @@ public class JFInicio extends javax.swing.JFrame {
         btnAgregarUsuario.addActionListener(this::btnAgregarUsuarioActionPerformed);
 
         btnAgregarSintoma.setText("Agregar Sintoma");
+        btnAgregarSintoma.addActionListener(this::btnAgregarSintomaActionPerformed);
 
         btnConsultarEnfermedades.setText("Consultar Enfermedades");
         btnConsultarEnfermedades.addActionListener(this::btnConsultarEnfermedadesActionPerformed);
@@ -125,7 +126,8 @@ public class JFInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarUsuarioActionPerformed
 
     private void btnConsultarEnfermedadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarEnfermedadesActionPerformed
-        
+        new JFEnfermedades().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnConsultarEnfermedadesActionPerformed
 
     private void btnEditarEnfermedadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarEnfermedadActionPerformed
@@ -140,6 +142,11 @@ public class JFInicio extends javax.swing.JFrame {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnAgregarSintomaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarSintomaActionPerformed
+        new JFAgregarSintoma().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAgregarSintomaActionPerformed
 
     /**
      * @param args the command line arguments

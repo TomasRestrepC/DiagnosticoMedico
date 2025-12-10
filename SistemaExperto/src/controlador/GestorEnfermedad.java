@@ -9,54 +9,36 @@ package controlador;
  * @author smuel
  */
 import models.Enfermedad;
-import models.Sintomas;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GestorEnfermedad {
+    
+    public int agregarEnfermedad(String nombre, String categoria, String recomendacion) {
+        String sql = "INSERT INTO enfermedades (nombre, categoria, recomendacion) VALUES (?, ?, ?)";
 
-    public boolean agregarEnfermedad(Enfermedad enf, List<Sintomas> sintomas) {
-        ConexionBD conexion = new ConexionBD();
-        Connection con = null;
+        try (Connection con = new ConexionBD().conectar();
+             PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-        try {
-            con = conexion.conectar();
-            con.setAutoCommit(false);
-            
-            String sqlEnf = "INSERT INTO enfermedades(nombre, categoria, recomendacion) VALUES (?, ?, ?)";
-            PreparedStatement pstEnf = con.prepareStatement(sqlEnf, Statement.RETURN_GENERATED_KEYS);
+            pst.setString(1, nombre);
+            pst.setString(2, categoria);
+            pst.setString(3, recomendacion);
 
-            pstEnf.setString(1, enf.getNombre());
-            pstEnf.setString(2, enf.getCategoria());
-            pstEnf.setString(3, enf.getRecomendacion());
-            pstEnf.executeUpdate();
+            pst.executeUpdate();
 
-            ResultSet rs = pstEnf.getGeneratedKeys();
-            rs.next();
-            int idEnf = rs.getInt(1);
-            
-            String sqlSint = "INSERT INTO sintomas_enfermedad(enfermedad_id, sintoma) VALUES (?, ?)";
-            PreparedStatement pstSint = con.prepareStatement(sqlSint);
-
-            for (Sintomas s : sintomas) {
-                pstSint.setInt(1, idEnf);
-                pstSint.setString(2, s.getDescripcion());
-                pstSint.executeUpdate();
+            ResultSet rs = pst.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);  // ID autogenerado
             }
 
-            con.commit();
-            return true;
-
-        } catch (Exception e) {
-            System.err.println("Error al agregar enfermedad: " + e.getMessage());
-            try { con.rollback(); } catch (Exception ex) {}
-            return false;
-
-        } finally {
-            try { if (con != null) con.close(); } catch (Exception e) {}
+        } catch (SQLException e) {
+            System.out.println("Error agregando enfermedad: " + e.getMessage());
         }
-    }
+
+        return -1;
+    }    
+    
 public List<Enfermedad> obtenerEnfermedades() {
     List<Enfermedad> lista = new ArrayList<>();
 
