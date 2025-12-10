@@ -12,24 +12,17 @@ import models.Paciente; // Importar la clase Paciente para usarla
  */
 public class GestorDiagnostico {
     
-    // Asegúrate que 'src/reglas.pl' sea la ruta correcta de tu archivo Prolog.
+  
     private static final String RUTA_PROLOG = "src/reglas.pl";
 
-    /**
-     * TAREA PRINCIPAL: Cumplir con el requisito de cargar datos de MySQL a Prolog
-     * usando dynamic y assertz.
-     */
-// Dentro de la clase GestorDiagnostico.java
+   
 
-/**
- * TAREA PRINCIPAL: Cumplir con el requisito de cargar datos de MySQL a Prolog
- * usando dynamic y assertz, con manejo robusto de recursos SQL.
- */
+
 public void cargarBaseConocimiento() {
     ConexionBD conexion = new ConexionBD();
     
     try {
-        // 1. Inicializar el motor de Prolog y consultar el archivo de reglas
+      
         Query qConsult = new Query("consult('" + RUTA_PROLOG + "')");
         qConsult.hasSolution();
         
@@ -38,18 +31,18 @@ public void cargarBaseConocimiento() {
 
         System.out.println("DEBUG: Iniciando carga de BC desde MySQL...");
         
-        // Usar try-with-resources para asegurar el cierre de la conexión
+       
         try (Connection con = conexion.conectar()) {
             if (con == null) {
                 System.err.println("Error: Conexión a la base de datos es nula.");
                 return;
             }
 
-            // --- 3. Cargar Enfermedades (enfermedad/3) usando PreparedStatement.execute() ---
+          
             String sqlEnf = "SELECT nombre, categoria, recomendacion FROM enfermedades";
             try (PreparedStatement pstEnf = con.prepareStatement(sqlEnf)) {
                 
-                // USAMOS execute() en lugar de executeQuery() para evitar el error de estado del driver
+               
                 boolean hasResults = pstEnf.execute(); 
                 
                 if (hasResults) {
@@ -63,15 +56,15 @@ public void cargarBaseConocimiento() {
                             String hecho = String.format("assertz(enfermedad('%s', '%s', '%s'))", nom, cat, rec);
                             new Query(hecho).hasSolution();
                         }
-                    } // rsEnf se cierra aquí
+                    } 
                 }
-            } // pstEnf se cierra aquí
+            }
 
-            // --- 4. Cargar Síntomas (sintoma_de/2) usando PreparedStatement.execute() ---
+           
             String sqlSint = "SELECT e.nombre, s.sintoma FROM sintomas_enfermedad s JOIN enfermedades e ON s.enfermedad_id = e.id";
             try (PreparedStatement pstSint = con.prepareStatement(sqlSint)) {
 
-                // USAMOS execute() en lugar de executeQuery()
+            
                 boolean hasResults = pstSint.execute();
                 
                 if (hasResults) {
@@ -83,12 +76,12 @@ public void cargarBaseConocimiento() {
                             String hecho = String.format("assertz(sintoma_de('%s', '%s'))", nom, sint);
                             new Query(hecho).hasSolution();
                         }
-                    } // rsSint se cierra aquí
+                    }
                 }
-            } // pstSint se cierra aquí
+            }
 
             System.out.println("Base de Conocimiento de Prolog cargada dinámicamente desde MySQL.");
-        } // La conexión 'con' se cierra automáticamente aquí
+        } 
         
     } catch (SQLException sqle) {
         System.err.println("Error de SQL al cargar la base de conocimiento: " + sqle.getMessage());
@@ -100,12 +93,7 @@ public void cargarBaseConocimiento() {
     }
 }
 
-    /**
-     * TAREA 2: Generación de diagnósticos usando la regla 'diagnostico' de Prolog.
-     * @param paciente Objeto Paciente (contiene nombre/edad)
-     * @param sintomasPaciente Lista de síntomas que presenta el paciente
-     * @return String con el resultado formateado
-     */
+   
     public String obtenerDiagnostico(Paciente paciente, List<String> sintomasPaciente) {
         
         // 1. Convertir la lista Java ['fiebre', 'tos'] al formato de lista Prolog: [fiebre, tos]
@@ -122,11 +110,11 @@ public void cargarBaseConocimiento() {
         
         boolean encontrado = false;
         
-        // 3. Iterar sobre posibles soluciones que nos devuelve Prolog
+        
         while (q.hasMoreSolutions()) {
             java.util.Map<String, Term> solucion = q.nextSolution();
             
-            // Reemplazar underscores por espacios para una mejor presentación al usuario
+           
             String enf = solucion.get("Enf").toString().replace("_", " ");
             String cat = solucion.get("Cat").toString().replace("_", "/");
             String rec = solucion.get("Rec").toString();
@@ -137,7 +125,7 @@ public void cargarBaseConocimiento() {
             
             encontrado = true;
             
-            // 4. Almacenar en Historial (TAREA 3)
+           
             guardarHistorial(paciente.getNombre(), paciente.getEdad(), enf, cat); 
         }
         
@@ -145,13 +133,11 @@ public void cargarBaseConocimiento() {
             resultadoFinal.append("No se encontraron enfermedades que coincidan significativamente con los síntomas.");
         }
         
-        q.close(); // Cierra la consulta
+        q.close(); 
         return resultadoFinal.toString();
     }
 
-    /**
-     * TAREA 3.a: Almacenar los diagnósticos realizados en la base de datos relacional.
-     */
+
     public void guardarHistorial(String paciente, int edad, String enfermedad, String categoria) {
         ConexionBD conexion = new ConexionBD();
         String sql = "INSERT INTO historial_pacientes (nombre_paciente, edad, enfermedad_diagnosticada, categoria) VALUES (?, ?, ?, ?)";
@@ -170,17 +156,14 @@ public void cargarBaseConocimiento() {
         }
     }
     
-    // =========================================================================
-    // ============== TAREA 2.C: FILTROS AVANZADOS EN PROLOG ===================
-    // =========================================================================
-    
+ 
     /**
      * TAREA 2.c: Implementa el filtro 'diagnostico_categoria'.
      * @param categoria La categoría de enfermedad a filtrar (ej. "viral").
      * @return String con el listado de enfermedades de esa categoría.
      */
     public String obtenerDiagnosticosPorCategoria(String categoria) {
-        // Asegúrate que la categoría esté en el formato que usa Prolog (minúsculas, sin "/" si se reemplazó)
+    
         String catProlog = categoria.toLowerCase().replace(" ", "_").replace("/", "_");
         
         // Definir la consulta a Prolog
@@ -206,11 +189,7 @@ public void cargarBaseConocimiento() {
         q.close();
         return sb.toString();
     }
-    
-    /**
-     * TAREA 2.c: Implementa el filtro 'enfermedades_cronicas'.
-     * @return String con el listado de todas las enfermedades crónicas.
-     */
+
     public String obtenerEnfermedadesCronicas() {
         // Definir la consulta a Prolog (usa la regla estática)
         String consulta = "enfermedades_cronicas(Enf, Cat, Rec)";

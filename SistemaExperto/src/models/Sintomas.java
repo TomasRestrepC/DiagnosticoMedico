@@ -8,7 +8,7 @@ package models;
  *
  * @author smuel
  */
-class Sintomas {
+public class Sintomas {
     private int id;
     private String descripcion;
 
