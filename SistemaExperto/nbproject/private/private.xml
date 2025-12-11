@@ -5,9 +5,16 @@
         <group>
             <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/controlador/GestorDiagnostico.java</file>
             <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/reglas.pl</file>
+<<<<<<< Updated upstream
             <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/controlador/ConexionBD.java</file>
             <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/models/Enfermedad.java</file>
             <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/gui/JFSintomas.java</file>
+=======
+            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/prolog/Prolog.java</file>
+            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/models/Enfermedad.java</file>
+            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/gui/JFSintomas.java</file>
+            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/database/ConexionBD.java</file>
+>>>>>>> Stashed changes
             <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/gui/JFInicio.java</file>
         </group>
     </open-files>

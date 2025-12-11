@@ -40,4 +40,17 @@ enfermedades_cronicas(Enfermedad, Categoria, Recomendacion) :-
 % Uso en Java: Query("enfermedades_por_sintoma(Enf, 'fiebre')").
 enfermedades_por_sintoma(Enfermedad, Sintoma) :-
     enfermedad(Enfermedad, _, _),
+<<<<<<< Updated upstream
     sintoma_de(Enfermedad, Sintoma).
+=======
+    sintoma_de(Enfermedad, Sintoma).
+
+% Busca un diagnóstico que cumpla con los síntomas Y cuya categoría coincida con el filtro.
+diagnostico_filtrado(Enfermedad, Categoria, Recomendacion, ListaSintomasPaciente, CategoriaFiltro) :-
+    % 1. Encontrar un diagnóstico base (coincidencia de al menos un síntoma)
+    diagnostico(Enfermedad, Categoria, Recomendacion, ListaSintomasPaciente),
+    
+    % 2. Aplicar el filtro de categoría (unificación)
+    Categoria = CategoriaFiltro.
+
+>>>>>>> Stashed changes
