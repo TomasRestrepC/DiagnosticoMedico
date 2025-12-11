@@ -4,7 +4,8 @@
  */
 package gui;
 
-import javax.swing.JOptionPane;
+import controlador.GestorDiagnostico;
+import prolog.Prolog;
 
 /**
  *
@@ -13,12 +14,19 @@ import javax.swing.JOptionPane;
 public class JFInicio extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFInicio.class.getName());
-
+    prolog.Prolog pl = new Prolog();
     /**
      * Creates new form JFInicio
      */
     public JFInicio() {
         initComponents();
+        try {
+            pl.cargarBaseConocimiento();
+        } catch (Exception e) {
+            System.err.println("Error al cargar la base de conocimiento en JFInicio: " + e.getMessage());
+            e.printStackTrace();
+            // No detener la aplicación, continuar con la GUI
+        }
     }
 
     /**
@@ -31,175 +39,114 @@ public class JFInicio extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        campoEdad = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        campoNombre = new javax.swing.JTextField();
-        btnContinuar = new javax.swing.JButton();
+        btnAgregarUsuario = new javax.swing.JButton();
+        btnAgregarSintoma = new javax.swing.JButton();
+        btnConsultarEnfermedades = new javax.swing.JButton();
+        btnAgregarEnfermedad = new javax.swing.JButton();
+        btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Sistema Experto");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Nombre");
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Elige una opción");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 62, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 32, Short.MAX_VALUE)
-        );
+        btnAgregarUsuario.setText("Agregar Usuario");
+        btnAgregarUsuario.addActionListener(this::btnAgregarUsuarioActionPerformed);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel1Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
+        btnAgregarSintoma.setText("Agregar Sintoma");
+        btnAgregarSintoma.addActionListener(this::btnAgregarSintomaActionPerformed);
 
-        campoEdad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        campoEdad.setToolTipText("");
-        campoEdad.addActionListener(this::campoEdadActionPerformed);
+        btnConsultarEnfermedades.setText("Consultar Enfermedades");
+        btnConsultarEnfermedades.addActionListener(this::btnConsultarEnfermedadesActionPerformed);
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Edad");
+        btnAgregarEnfermedad.setText("Agregar Enfermedad");
+        btnAgregarEnfermedad.addActionListener(this::btnAgregarEnfermedadActionPerformed);
 
-        campoNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        campoNombre.setToolTipText("");
-        campoNombre.setActionCommand("<Not Set>");
-        campoNombre.setAutoscrolls(false);
-        campoNombre.addActionListener(this::campoNombreActionPerformed);
-
-        btnContinuar.setText("Continuar");
-        btnContinuar.addActionListener(this::btnContinuarActionPerformed);
+        btnSalir.setText("Salir");
+        btnSalir.addActionListener(this::btnSalirActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator1))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnSalir)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(181, 181, 181)
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(109, 109, 109)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(campoEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
-                        .addComponent(campoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(71, 71, 71))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnContinuar)
-                .addGap(24, 24, 24))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(123, 123, 123)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(252, 252, 252)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(31, 31, 31)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(btnConsultarEnfermedades)
+                                        .addComponent(btnAgregarUsuario, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnAgregarEnfermedad, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnAgregarSintoma, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(44, 44, 44)))))
+                        .addGap(119, 119, 119)))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(campoNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(campoEdad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
-                .addComponent(btnContinuar)
-                .addGap(26, 26, 26))
+                .addComponent(jLabel3)
+                .addGap(14, 14, 14)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(btnAgregarUsuario)
+                .addGap(18, 18, 18)
+                .addComponent(btnConsultarEnfermedades)
+                .addGap(18, 18, 18)
+                .addComponent(btnAgregarEnfermedad)
+                .addGap(18, 18, 18)
+                .addComponent(btnAgregarSintoma)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSalir)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
-
-        jLabel3.getAccessibleContext().setAccessibleDescription("");
-        campoNombre.getAccessibleContext().setAccessibleDescription("Nombre");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void campoEdadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoEdadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoEdadActionPerformed
+    private void btnAgregarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUsuarioActionPerformed
+        new JFUsuario().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAgregarUsuarioActionPerformed
 
-    private void campoNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoNombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoNombreActionPerformed
+    private void btnConsultarEnfermedadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarEnfermedadesActionPerformed
+        new JFEnfermedades().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnConsultarEnfermedadesActionPerformed
 
-    private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
-        String nombre = campoNombre.getText();
-        String edadTxt = campoEdad.getText().trim();
-        
-    
-        if(nombre.isEmpty() || edadTxt.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Por favor completar todos los campos");
-        }
-        
-        if (!edadTxt.matches("\\d+")){ // esto hace que solo acepte numeros 
-            JOptionPane.showMessageDialog(this, "La edad debe ser un numero");
-        }
-        
-        int edad = Integer.parseInt(edadTxt);
-        
-        if (edad <= 0 || edad > 120){
-            JOptionPane.showMessageDialog(this, "Por favor ingrese una edad valida");
-        }
-        
-        var mensaje = """
-                         Los datos son correctos?
-                         Nombre:""" + nombre + "\n" + "Edad: " + edad;
-        
-        int opcion = JOptionPane.showConfirmDialog(this, mensaje, "confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        
-        if (opcion == JOptionPane.YES_OPTION) {
-            new JFSintomas(nombre, edad).setVisible(true);
-            this.dispose();
-        }
-        
+    private void btnAgregarEnfermedadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEnfermedadActionPerformed
+        new JFAgregarEnfermedad().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAgregarEnfermedadActionPerformed
 
-    }//GEN-LAST:event_btnContinuarActionPerformed
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnAgregarSintomaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarSintomaActionPerformed
+        new JFAgregarSintoma().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnAgregarSintomaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -227,14 +174,13 @@ public class JFInicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnContinuar;
-    private javax.swing.JTextField campoEdad;
-    private javax.swing.JTextField campoNombre;
+    private javax.swing.JButton btnAgregarEnfermedad;
+    private javax.swing.JButton btnAgregarSintoma;
+    private javax.swing.JButton btnAgregarUsuario;
+    private javax.swing.JButton btnConsultarEnfermedades;
+    private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

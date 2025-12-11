@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package models;
+import java.util.ArrayList;
 import java.util.List;
 /**
  *
@@ -15,12 +16,12 @@ public class Enfermedad {
     private String recomendacion;
     private List<Sintomas> sintomas;
     
-    public Enfermedad(int id, String nombre, String categoria, String recomendacion, List<Sintomas> sintomas) {
+    public Enfermedad(int id, String nombre, String categoria, String recomendacion) {
         this.id = id;
         this.nombre = nombre;
         this.categoria = categoria;
         this.recomendacion = recomendacion;
-        this.sintomas = sintomas;
+        this.sintomas = new ArrayList<>();
     }
     
         public int getId() {
@@ -42,5 +43,22 @@ public class Enfermedad {
     public List<Sintomas> getSintomas() {
         return sintomas;
     }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public void setRecomendacion(String recomendacion) {
+        this.recomendacion = recomendacion;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     
-}
+    }  
+  

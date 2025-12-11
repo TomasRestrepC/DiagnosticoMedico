@@ -166,7 +166,7 @@ public void cargarBaseConocimiento() {
             resultadoFinal.append("No se encontraron enfermedades que coincidan significativamente con los síntomas.");
         }
         
-        q.close(); // Cierra la consulta
+        q.close(); 
         return resultadoFinal.toString();
     }
 
@@ -242,17 +242,14 @@ public void cargarBaseConocimiento() {
         }
     }
     
-    // =========================================================================
-    // ============== TAREA 2.C: FILTROS AVANZADOS EN PROLOG ===================
-    // =========================================================================
-    
+ 
     /**
      * TAREA 2.c: Implementa el filtro 'diagnostico_categoria'.
      * @param categoria La categoría de enfermedad a filtrar (ej. "viral").
      * @return String con el listado de enfermedades de esa categoría.
      */
     public String obtenerDiagnosticosPorCategoria(String categoria) {
-        // Asegúrate que la categoría esté en el formato que usa Prolog (minúsculas, sin "/" si se reemplazó)
+    
         String catProlog = categoria.toLowerCase().replace(" ", "_").replace("/", "_");
         
         // Definir la consulta a Prolog
