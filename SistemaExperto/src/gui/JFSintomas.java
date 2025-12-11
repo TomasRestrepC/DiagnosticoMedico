@@ -7,19 +7,13 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JCheckBox;
-import controlador.GestorDiagnostico;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JFileChooser;
 import java.io.File;
-import java.awt.Component;
-
 import controlador.GestorDiagnostico;
 import controlador.GestorSintoma;
-import models.Paciente;
 import prolog.Prolog;
 /**
  *
@@ -48,16 +42,13 @@ public class JFSintomas extends javax.swing.JFrame {
         this.nombrePaciente = nombre;
         this.edadPaciente = edad;
         inicializarComponentesPersonalizados();
-        // cargarSintomas();
     }
     
     private void inicializarComponentesPersonalizados() {
         
-        // --- 1. Crear Panel Contenedor de Síntomas ---
         panelCheckboxes = new JPanel();
         panelCheckboxes.setLayout(new BoxLayout(panelCheckboxes, BoxLayout.Y_AXIS)); 
         
-        // --- 2. Cargar Síntomas Dinámicamente desde la BD ---
         GestorSintoma gestorSintoma = new GestorSintoma();
         List<String> sintomasBD = gestorSintoma.obtenerTodosLosSintomas();
         
@@ -66,38 +57,33 @@ public class JFSintomas extends javax.swing.JFrame {
         } else {
             for (String sintoma : sintomasBD) {
                 // Crear un checkbox por cada síntoma
-                // 'sintoma' viene legible (ej: "dolor de cabeza")
                 JCheckBox chk = new JCheckBox(sintoma);
                 listaCheckBoxesGenerados.add(chk); // Guardarlo en la lista para revisarlo luego
                 panelCheckboxes.add(chk);          // Añadirlo visualmente
             }
         }
         
-        // Establecer el panel dentro del ScrollPane
         panelSintomas.setViewportView(panelCheckboxes);
         
-        // --- 3. Inicializar Área de Resultados ---
         txtAreaResultados = new javax.swing.JTextArea();
         scrollResultados = new javax.swing.JScrollPane();
         txtAreaResultados.setColumns(20);
         txtAreaResultados.setRows(5);
         txtAreaResultados.setEditable(false);
         scrollResultados.setViewportView(txtAreaResultados);
-        
-        // --- 2. Crear Panel Contenedor de Síntomas ---
+
         panelCheckboxes = new JPanel();
         panelCheckboxes.setLayout(new BoxLayout(panelCheckboxes, BoxLayout.Y_AXIS)); // Layout Vertical
         
-        // Agregar los checkboxes al panel
+
         for (JCheckBox chk : listaCheckBoxesGenerados) {
             panelCheckboxes.add(chk);
         }
         
-        // Establecer el panel de checkboxes dentro del JScrollPane de síntomas
+
         panelSintomas.setViewportView(panelCheckboxes);
         
         
-        // --- 3. Inicializar Área de Resultados (TAREA 2) ---
         txtAreaResultados = new javax.swing.JTextArea();
         scrollResultados = new javax.swing.JScrollPane();
         
@@ -108,7 +94,6 @@ public class JFSintomas extends javax.swing.JFrame {
         
         btnExportarCSV = new javax.swing.JButton("Exportar a CSV");
         btnExportarCSV.addActionListener(evt -> btnExportarCSVActionPerformed(evt));
-        // Añadir el scrollResultados al layout de la ventana
 
     }
    
@@ -190,8 +175,6 @@ public class JFSintomas extends javax.swing.JFrame {
         // Recorrer los checkboxes dinámicos
         for (JCheckBox chk : listaCheckBoxesGenerados) {
             if (chk.isSelected()) {
-                // Convertir el texto legible a formato Prolog (snake_case)
-                // Ej: "Dolor de Cabeza" -> "dolor_de_cabeza"
                 String sintomaProlog = chk.getText().toLowerCase().replace(" ", "_");
                 sintomasSeleccionados.add(sintomaProlog);
             }
@@ -207,21 +190,13 @@ public class JFSintomas extends javax.swing.JFrame {
         prolog.Prolog pl = new Prolog();
         pl.cargarBaseConocimiento(); 
         
-
-        
-        // Asegurar que la base de conocimiento está cargada
-        // (Si usas la clase Prolog.java para esto, llámala, si no, GestorDiagnostico debería encargarse)
-        // gestor.cargarBaseConocimiento(); // Si tienes este método
-        
-        // Obtener y mostrar diagnóstico
         String resultado = gestor.obtenerDiagnostico(paciente, sintomasSeleccionados);
         txtAreaResultados.setText(resultado);
         
-        // Mostrar el scroll de resultados si estaba oculto
+
         if (scrollResultados.getParent() == null) {
              // Lógica simple para añadirlo al final si no estaba en el diseño
              javax.swing.GroupLayout layout = (javax.swing.GroupLayout) getContentPane().getLayout();
-             // (Ajustar layout programáticamente es complejo, mejor agrégalo en el DESIGN)
              JOptionPane.showMessageDialog(this, resultado, "Diagnóstico", JOptionPane.INFORMATION_MESSAGE);
         }
 
@@ -241,7 +216,6 @@ public class JFSintomas extends javax.swing.JFrame {
         
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            // Asegurar extensión .csv
             if (!fileToSave.getAbsolutePath().endsWith(".csv")) {
                 fileToSave = new File(fileToSave.getAbsolutePath() + ".csv");
             }
