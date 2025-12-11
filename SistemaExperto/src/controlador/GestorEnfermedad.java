@@ -20,7 +20,7 @@ import org.jpl7.Term;
 public class GestorEnfermedad {
 
     /**
-     * Método estándar para agregar enfermedad (ID autogenerado por MySQL).
+     * Método estándar para agregar enfermedad.
      */
     public int agregarEnfermedad(String nombre, String categoria, String recomendacion) {
         // Llamamos al método interno indicando que NO usamos ID manual (false)
@@ -32,7 +32,6 @@ public class GestorEnfermedad {
      * @throws ExcepcionIdNoValido si el ID es 999.
      */
     public int agregarEnfermedad(int id, String nombre, String categoria, String recomendacion) throws ExcepcionIdNoValido {
-        // --- VALIDACIÓN DE REGLA DE NEGOCIO ---
         if (id == 999) {
             throw new ExcepcionIdNoValido("El ID 999 está reservado y no puede ser utilizado para enfermedades.");
         }

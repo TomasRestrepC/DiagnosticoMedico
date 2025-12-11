@@ -12,8 +12,7 @@ import java.sql.SQLException;
  * @author tomas
  */
 public class ConexionBD {
-    
-    // Configura estas variables con tus datos de MySQL
+
     private static final String URL = "jdbc:mysql://localhost:3306/diagnosticomedico";
     private static final String USER = "root";       
     private static final String PASSWORD = "TRC12345"; 
@@ -21,7 +20,6 @@ public class ConexionBD {
     public Connection conectar() {
         Connection con = null;
         try {
-            // Asegurese de tener el driver JDBC agregado en las librerías de NetBeans
             con = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Conexión exitosa a MySQL.");
         } catch (SQLException e) {

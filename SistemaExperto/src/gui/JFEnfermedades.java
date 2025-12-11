@@ -17,10 +17,6 @@ public class JFEnfermedades extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFEnfermedades.class.getName());
     private GestorEnfermedad controladorEnfermedad = new GestorEnfermedad();
-   
-
-
-
     /**
      * Creates new form JFEnfermedades
      */
@@ -28,8 +24,7 @@ public class JFEnfermedades extends javax.swing.JFrame {
         initComponents();
         cargarTabla();
     }
-    
-    
+       
     private void cargarTabla() {
         List<Enfermedad> enfermedades = controladorEnfermedad.obtenerEnfermedades();
 

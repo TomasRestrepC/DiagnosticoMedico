@@ -4,7 +4,6 @@
  */
 package gui;
 
-import controlador.GestorDiagnostico;
 import prolog.Prolog;
 
 /**
@@ -46,6 +45,8 @@ public class JFInicio extends javax.swing.JFrame {
         btnConsultarEnfermedades = new javax.swing.JButton();
         btnAgregarEnfermedad = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        btnEstadisticas = new javax.swing.JButton();
+        btnConsultarHistorial = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,6 +71,12 @@ public class JFInicio extends javax.swing.JFrame {
         btnSalir.setText("Salir");
         btnSalir.addActionListener(this::btnSalirActionPerformed);
 
+        btnEstadisticas.setText("Estadisticas");
+        btnEstadisticas.addActionListener(this::btnEstadisticasActionPerformed);
+
+        btnConsultarHistorial.setText("Consultar Historial");
+        btnConsultarHistorial.addActionListener(this::btnConsultarHistorialActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -84,20 +91,25 @@ public class JFInicio extends javax.swing.JFrame {
                                 .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(252, 252, 252)
-                                .addComponent(jLabel2))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(31, 31, 31)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(btnConsultarEnfermedades)
-                                        .addComponent(btnAgregarUsuario, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(btnAgregarEnfermedad, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(btnAgregarSintoma, javax.swing.GroupLayout.Alignment.LEADING))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addGap(44, 44, 44)))))
+                                .addComponent(jLabel2)))
                         .addGap(119, 119, 119)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnConsultarEnfermedades)
+                        .addComponent(btnAgregarUsuario, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnAgregarEnfermedad, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnAgregarSintoma, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(44, 44, 44)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEstadisticas)
+                    .addComponent(btnConsultarHistorial))
+                .addGap(66, 66, 66))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,9 +121,13 @@ public class JFInicio extends javax.swing.JFrame {
                 .addGap(14, 14, 14)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(btnAgregarUsuario)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAgregarUsuario)
+                    .addComponent(btnEstadisticas))
                 .addGap(18, 18, 18)
-                .addComponent(btnConsultarEnfermedades)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnConsultarEnfermedades)
+                    .addComponent(btnConsultarHistorial))
                 .addGap(18, 18, 18)
                 .addComponent(btnAgregarEnfermedad)
                 .addGap(18, 18, 18)
@@ -148,6 +164,18 @@ public class JFInicio extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnAgregarSintomaActionPerformed
 
+    private void btnEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadisticasActionPerformed
+        JFEstadisticas estadisticasFrame = new JFEstadisticas();
+        estadisticasFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnEstadisticasActionPerformed
+
+    private void btnConsultarHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarHistorialActionPerformed
+        JFHistorial historialFrame = new JFHistorial();
+        historialFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnConsultarHistorialActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -178,6 +206,8 @@ public class JFInicio extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarSintoma;
     private javax.swing.JButton btnAgregarUsuario;
     private javax.swing.JButton btnConsultarEnfermedades;
+    private javax.swing.JButton btnConsultarHistorial;
+    private javax.swing.JButton btnEstadisticas;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
