@@ -8,60 +8,70 @@ package controlador;
  *
  * @author smuel
  */
+import database.ConexionBD;
 import models.Enfermedad;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import org.jpl7.Query;
+import org.jpl7.Term;
 
 public class GestorEnfermedad {
     
-    public int agregarEnfermedad(String nombre, String categoria, String recomendacion) {
-        String sql = "INSERT INTO enfermedades (nombre, categoria, recomendacion) VALUES (?, ?, ?)";
+    
+public int agregarEnfermedad(String nombre, String categoria, String recomendacion) {
+    String sql = "INSERT INTO enfermedades (nombre, categoria, recomendacion) VALUES (?, ?, ?)";
 
-        try (Connection con = new ConexionBD().conectar();
-             PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    try (Connection con = new ConexionBD().conectar();
+         PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            pst.setString(1, nombre);
-            pst.setString(2, categoria);
-            pst.setString(3, recomendacion);
+        pst.setString(1, nombre);
+        pst.setString(2, categoria);
+        pst.setString(3, recomendacion);
 
-            pst.executeUpdate();
+        pst.executeUpdate();
 
-            ResultSet rs = pst.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);  // ID autogenerado
-            }
+        ResultSet rs = pst.getGeneratedKeys();
+        if (rs.next()) {
+            String nombrePL = nombre.toLowerCase().replace(" ", "_");
+            String categoriaPL = categoria.toLowerCase().replace(" ", "_");
+            String recomendacionPL = recomendacion.replace("'", " ").replace(",", " ");
 
-        } catch (SQLException e) {
-            System.out.println("Error agregando enfermedad: " + e.getMessage());
+            String hecho = String.format(
+                "assertz(enfermedad('%s', '%s', '%s'))",
+                nombrePL, categoriaPL, recomendacionPL
+            );
+
+            System.out.println("Insertando en Prolog: " + hecho);
+
+            new org.jpl7.Query(hecho).hasSolution();
+
+            return rs.getInt(1); // devolver ID generado
         }
 
-        return -1;
-    }    
+    } catch (SQLException e) {
+        System.out.println("Error agregando enfermedad: " + e.getMessage());
+    }
+
+    return -1;
+}
     
 public List<Enfermedad> obtenerEnfermedades() {
     List<Enfermedad> lista = new ArrayList<>();
 
-    String sql = "SELECT * FROM enfermedades ORDER BY id ASC";
+    Query q = new Query("enfermedad(Nombre, Categoria, Recomendacion)");
 
-    try (Connection con = new ConexionBD().conectar();
-         PreparedStatement pst = con.prepareStatement(sql);
-         ResultSet rs = pst.executeQuery()) {
+    while (q.hasMoreSolutions()) {
+        Map<String, Term> sol = q.nextSolution();
 
-        while (rs.next()) {
-            
-            Enfermedad e = new Enfermedad(
-                rs.getInt("id"),
-                rs.getString("nombre"),
-                rs.getString("categoria"),
-                rs.getString("recomendacion")
-            );
+        String nombre = sol.get("Nombre").name().replace("_", " ");
+        String categoria = sol.get("Categoria").name();
+        String recomendacion = sol.get("Recomendacion").toString().replace("_", " ");
 
-            lista.add(e);
-        }
+        Enfermedad e = new Enfermedad(0, nombre, categoria, recomendacion); // se le pone 0 porque prolog no guarda id
 
-    } catch (SQLException e) {
-        System.out.println("Error al obtener enfermedades: " + e.getMessage());
+        lista.add(e);
     }
 
     return lista;

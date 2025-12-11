@@ -10,33 +10,34 @@ package controlador;
  */
 
 
+import database.ConexionBD;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GestorSintoma {
     
-   public List<String> obtenerTodosLosSintomas() {
-    List<String> lista = new ArrayList<>();
+public List<String> obtenerTodosLosSintomas() {
+    java.util.Set<String> set = new java.util.LinkedHashSet<>();
 
-    String sql = "SELECT DISTINCT `sintoma` FROM `sintomas_enfermedad` ORDER BY `sintoma` ASC";
+    org.jpl7.Query q = new org.jpl7.Query("sintoma_de(_, S)");
 
-    try (Connection con = new ConexionBD().conectar();
-         PreparedStatement pst = con.prepareStatement(sql);
-         ResultSet rs = pst.executeQuery()) {
+    while (q.hasMoreSolutions()) {
+        var sol = q.nextSolution();
 
-        while (rs.next()) {
-            lista.add(rs.getString("sintoma"));
-        }
+        String sint = sol.get("S")
+                         .toString()              
+                         .replace("_", " ");  
 
-    } catch (SQLException e) {
-        System.out.println("Error obteniendo síntomas: " + e.getMessage());
+        set.add(sint);
     }
-
-    return lista;
+    q.close();
+    return new ArrayList<>(set);
+    
 }
 
-    public void agregarSintomas(int idEnfermedad, List<String> sintomas) {
+
+    public void agregarSintomasAEnfermedad(int idEnfermedad, List<String> sintomas) {
 
         String sql = "INSERT INTO sintomas_enfermedad (enfermedad_id, sintoma) VALUES (?, ?)";
 
@@ -55,15 +56,25 @@ public class GestorSintoma {
     }
     
     public boolean agregarNuevoSintoma(String sintoma) {
-        String sql = "INSERT INTO sintomas_enfermedad (enfermedad_id, sintoma) VALUES (NULL, ?)";
+        String sql = "INSERT INTO sintomas_enfermedad (enfermedad_id, sintoma) VALUES (999, ?)";
 
         try (Connection con = new ConexionBD().conectar();
             PreparedStatement pst = con.prepareStatement(sql)) {
-            pst.setString(1, sintoma);
+            String sintPL = sintoma.toLowerCase().replace(" ", "_");
+            pst.setString(1, sintPL);
             pst.executeUpdate();
-            return true;
 
-        }catch (SQLException e) {
+            String hecho = String.format(
+                "assertz(sintoma_de(sintoma_generico, '%s'))",
+                sintPL
+            );
+            
+            
+            System.out.println(hecho);
+        new org.jpl7.Query(hecho).hasSolution();
+
+        return true;
+    } catch (SQLException e) {
         System.out.println("Error agregando síntoma: " + e.getMessage());
         return false;
     }

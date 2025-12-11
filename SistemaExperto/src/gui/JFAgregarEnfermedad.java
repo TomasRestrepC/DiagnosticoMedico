@@ -234,7 +234,7 @@ public class JFAgregarEnfermedad extends javax.swing.JFrame {
         int id = controlador2.agregarEnfermedad(nombre, categoria, recomendacion);
 
         if (id != -1) {
-            controlador.agregarSintomas(id, sintomasSeleccionados);
+            controlador.agregarSintomasAEnfermedad(id, sintomasSeleccionados);
             JOptionPane.showMessageDialog(this, "Enfermedad agregada correctamente.");
         } else {
             JOptionPane.showMessageDialog(this, "Error al agregar enfermedad.");

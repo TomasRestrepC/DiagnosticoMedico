@@ -4,6 +4,9 @@
  */
 package gui;
 
+import controlador.GestorDiagnostico;
+import prolog.Prolog;
+
 /**
  *
  * @author smuel
@@ -11,12 +14,19 @@ package gui;
 public class JFInicio extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFInicio.class.getName());
-
+    prolog.Prolog pl = new Prolog();
     /**
      * Creates new form JFInicio
      */
     public JFInicio() {
         initComponents();
+        try {
+            pl.cargarBaseConocimiento();
+        } catch (Exception e) {
+            System.err.println("Error al cargar la base de conocimiento en JFInicio: " + e.getMessage());
+            e.printStackTrace();
+            // No detener la aplicación, continuar con la GUI
+        }
     }
 
     /**
@@ -34,7 +44,6 @@ public class JFInicio extends javax.swing.JFrame {
         btnAgregarUsuario = new javax.swing.JButton();
         btnAgregarSintoma = new javax.swing.JButton();
         btnConsultarEnfermedades = new javax.swing.JButton();
-        btnEditarEnfermedad = new javax.swing.JButton();
         btnAgregarEnfermedad = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
 
@@ -55,9 +64,6 @@ public class JFInicio extends javax.swing.JFrame {
         btnConsultarEnfermedades.setText("Consultar Enfermedades");
         btnConsultarEnfermedades.addActionListener(this::btnConsultarEnfermedadesActionPerformed);
 
-        btnEditarEnfermedad.setText("Editar Enfermedad");
-        btnEditarEnfermedad.addActionListener(this::btnEditarEnfermedadActionPerformed);
-
         btnAgregarEnfermedad.setText("Agregar Enfermedad");
         btnAgregarEnfermedad.addActionListener(this::btnAgregarEnfermedadActionPerformed);
 
@@ -71,26 +77,26 @@ public class JFInicio extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnSalir)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(123, 123, 123)
-                            .addComponent(jLabel1))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(252, 252, 252)
-                            .addComponent(jLabel2))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(31, 31, 31)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(123, 123, 123)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(252, 252, 252)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(31, 31, 31)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btnConsultarEnfermedades)
-                                    .addComponent(btnAgregarUsuario, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnEditarEnfermedad, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnAgregarEnfermedad, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addGap(44, 44, 44)))
-                            .addGap(46, 46, 46)
-                            .addComponent(btnAgregarSintoma))))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(btnConsultarEnfermedades)
+                                        .addComponent(btnAgregarUsuario, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnAgregarEnfermedad, javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnAgregarSintoma, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(44, 44, 44)))))
+                        .addGap(119, 119, 119)))
                 .addContainerGap(29, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -103,15 +109,13 @@ public class JFInicio extends javax.swing.JFrame {
                 .addGap(14, 14, 14)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAgregarUsuario)
-                    .addComponent(btnAgregarSintoma))
+                .addComponent(btnAgregarUsuario)
                 .addGap(18, 18, 18)
                 .addComponent(btnConsultarEnfermedades)
                 .addGap(18, 18, 18)
-                .addComponent(btnEditarEnfermedad)
-                .addGap(18, 18, 18)
                 .addComponent(btnAgregarEnfermedad)
+                .addGap(18, 18, 18)
+                .addComponent(btnAgregarSintoma)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSalir)
                 .addContainerGap(19, Short.MAX_VALUE))
@@ -129,10 +133,6 @@ public class JFInicio extends javax.swing.JFrame {
         new JFEnfermedades().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnConsultarEnfermedadesActionPerformed
-
-    private void btnEditarEnfermedadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarEnfermedadActionPerformed
-       
-    }//GEN-LAST:event_btnEditarEnfermedadActionPerformed
 
     private void btnAgregarEnfermedadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEnfermedadActionPerformed
         new JFAgregarEnfermedad().setVisible(true);
@@ -178,7 +178,6 @@ public class JFInicio extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarSintoma;
     private javax.swing.JButton btnAgregarUsuario;
     private javax.swing.JButton btnConsultarEnfermedades;
-    private javax.swing.JButton btnEditarEnfermedad;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

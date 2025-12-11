@@ -10,6 +10,7 @@ import javax.swing.JCheckBox;
 import controlador.GestorDiagnostico;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import prolog.Prolog;
 
 /**
  *
@@ -159,8 +160,8 @@ private static final java.util.logging.Logger logger = java.util.logging.Logger.
         
         // --- TAREA 2: Generación de Diagnóstico (Llamada a la lógica) ---
         GestorDiagnostico gestor = new GestorDiagnostico(); 
-        
-        gestor.cargarBaseConocimiento(); 
+        prolog.Prolog pl = new Prolog(); 
+        pl.cargarBaseConocimiento(); 
         
         // Obtener el diagnóstico (Llama a guardarHistorial internamente - Tarea 3)
         String resultado = gestor.obtenerDiagnostico(paciente, sintomasSeleccionados);

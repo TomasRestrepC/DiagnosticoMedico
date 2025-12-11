@@ -2,6 +2,7 @@
 :- dynamic enfermedad/3.      % enfermedad(Nombre, Categoria, Recomendacion)
 :- dynamic sintoma_de/2.      % sintoma_de(NombreEnfermedad, Sintoma)
 
+
 % Regla para limpiar la base de conocimiento antes de una nueva carga desde Java
 limpiar_conocimiento :-
     retractall(enfermedad(_,_,_)),
@@ -41,3 +42,4 @@ enfermedades_cronicas(Enfermedad, Categoria, Recomendacion) :-
 enfermedades_por_sintoma(Enfermedad, Sintoma) :-
     enfermedad(Enfermedad, _, _),
     sintoma_de(Enfermedad, Sintoma).
+

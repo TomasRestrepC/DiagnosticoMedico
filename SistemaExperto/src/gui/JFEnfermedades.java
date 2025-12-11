@@ -17,6 +17,8 @@ public class JFEnfermedades extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFEnfermedades.class.getName());
     private GestorEnfermedad controladorEnfermedad = new GestorEnfermedad();
+   
+
 
 
     /**
@@ -31,15 +33,17 @@ public class JFEnfermedades extends javax.swing.JFrame {
     private void cargarTabla() {
         List<Enfermedad> enfermedades = controladorEnfermedad.obtenerEnfermedades();
 
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID");
-        model.addColumn("Nombre");
-        model.addColumn("Categoría");
-        model.addColumn("Recomendación");
+        DefaultTableModel model = new DefaultTableModel(
+            new Object[]{"Nombre", "Categoría", "Recomendación"}, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Hacer toda la tabla NO editable
+            }
+        };
 
         for (Enfermedad e : enfermedades) {
             model.addRow(new Object[]{
-                e.getId(),
                 e.getNombre(),
                 e.getCategoria(),
                 e.getRecomendacion()
@@ -48,6 +52,7 @@ public class JFEnfermedades extends javax.swing.JFrame {
 
         tablaEnfermedades.setModel(model);
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
