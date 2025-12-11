@@ -1,13 +1,11 @@
 package controlador;
 
-<<<<<<< Updated upstream
-=======
+
 import database.ConexionBD;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
->>>>>>> Stashed changes
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +15,13 @@ import org.jpl7.Query;
 import org.jpl7.Term;
 import models.Paciente; 
 import models.Diagnostico;
+import prolog.Prolog;
 
 public class GestorDiagnostico {
-<<<<<<< Updated upstream
+
     
     // Asegúrate que 'src/reglas.pl' sea la ruta correcta de tu archivo Prolog.
-    private static final String RUTA_PROLOG = "src/reglas.pl";
+
 
     /**
      * TAREA PRINCIPAL: Cumplir con el requisito de cargar datos de MySQL a Prolog
@@ -34,80 +33,7 @@ public class GestorDiagnostico {
  * TAREA PRINCIPAL: Cumplir con el requisito de cargar datos de MySQL a Prolog
  * usando dynamic y assertz, con manejo robusto de recursos SQL.
  */
-public void cargarBaseConocimiento() {
-    ConexionBD conexion = new ConexionBD();
-    
-    try {
-        // 1. Inicializar el motor de Prolog y consultar el archivo de reglas
-        Query qConsult = new Query("consult('" + RUTA_PROLOG + "')");
-        qConsult.hasSolution();
-        
-        // 2. Limpiar la memoria dinámica de Prolog antes de cargar nuevos datos
-        new Query("limpiar_conocimiento").hasSolution();
 
-        System.out.println("DEBUG: Iniciando carga de BC desde MySQL...");
-        
-        // Usar try-with-resources para asegurar el cierre de la conexión
-        try (Connection con = conexion.conectar()) {
-            if (con == null) {
-                System.err.println("Error: Conexión a la base de datos es nula.");
-                return;
-            }
-
-            // --- 3. Cargar Enfermedades (enfermedad/3) usando PreparedStatement.execute() ---
-            String sqlEnf = "SELECT nombre, categoria, recomendacion FROM enfermedades";
-            try (PreparedStatement pstEnf = con.prepareStatement(sqlEnf)) {
-                
-                // USAMOS execute() en lugar de executeQuery() para evitar el error de estado del driver
-                boolean hasResults = pstEnf.execute(); 
-                
-                if (hasResults) {
-                    try (ResultSet rsEnf = pstEnf.getResultSet()) {
-                        while(rsEnf.next()) {
-                            // Lógica de limpieza y carga a Prolog
-                            String nom = rsEnf.getString("nombre").toLowerCase().replace(" ", "_");
-                            String cat = rsEnf.getString("categoria").toLowerCase().replace("/", "_");
-                            String rec = rsEnf.getString("recomendacion").replace("'", " ").replace(",", " "); 
-                            
-                            String hecho = String.format("assertz(enfermedad('%s', '%s', '%s'))", nom, cat, rec);
-                            new Query(hecho).hasSolution();
-                        }
-                    } // rsEnf se cierra aquí
-                }
-            } // pstEnf se cierra aquí
-
-            // --- 4. Cargar Síntomas (sintoma_de/2) usando PreparedStatement.execute() ---
-            String sqlSint = "SELECT e.nombre, s.sintoma FROM sintomas_enfermedad s JOIN enfermedades e ON s.enfermedad_id = e.id";
-            try (PreparedStatement pstSint = con.prepareStatement(sqlSint)) {
-
-                // USAMOS execute() en lugar de executeQuery()
-                boolean hasResults = pstSint.execute();
-                
-                if (hasResults) {
-                    try (ResultSet rsSint = pstSint.getResultSet()) {
-                        while(rsSint.next()) {
-                            String nom = rsSint.getString("nombre").toLowerCase().replace(" ", "_");
-                            String sint = rsSint.getString("sintoma").toLowerCase();
-                            
-                            String hecho = String.format("assertz(sintoma_de('%s', '%s'))", nom, sint);
-                            new Query(hecho).hasSolution();
-                        }
-                    } // rsSint se cierra aquí
-                }
-            } // pstSint se cierra aquí
-
-            System.out.println("Base de Conocimiento de Prolog cargada dinámicamente desde MySQL.");
-        } // La conexión 'con' se cierra automáticamente aquí
-        
-    } catch (SQLException sqle) {
-        System.err.println("Error de SQL al cargar la base de conocimiento: " + sqle.getMessage());
-        sqle.printStackTrace(); 
-        return;
-    } catch (Exception e) {
-        System.err.println("Error al cargar la base de conocimiento o conectar a Prolog: " + e.getMessage());
-        return;
-    }
-}
 
     /**
      * TAREA 2: Generación de diagnósticos usando la regla 'diagnostico' de Prolog.
@@ -115,12 +41,7 @@ public void cargarBaseConocimiento() {
      * @param sintomasPaciente Lista de síntomas que presenta el paciente
      * @return String con el resultado formateado
      */
-    public String obtenerDiagnostico(Paciente paciente, List<String> sintomasPaciente) {
         
-        // 1. Convertir la lista Java ['fiebre', 'tos'] al formato de lista Prolog: [fiebre, tos]
-        String listaProlog = "[" + String.join(",", sintomasPaciente) + "]";
-=======
->>>>>>> Stashed changes
 
     public String obtenerDiagnostico(Paciente paciente, List<String> sintomasPaciente) {
         String listaProlog = "[" + String.join(",", sintomasPaciente) + "]";
@@ -134,17 +55,14 @@ public void cargarBaseConocimiento() {
         
         boolean encontrado = false;
         
-<<<<<<< Updated upstream
+
         // 3. Iterar sobre posibles soluciones que nos devuelve Prolog
-=======
->>>>>>> Stashed changes
+
         while (q.hasMoreSolutions()) {
             Map<String, Term> solucion = q.nextSolution();
             
-<<<<<<< Updated upstream
             // Reemplazar underscores por espacios para una mejor presentación al usuario
-=======
->>>>>>> Stashed changes
+
             String enf = solucion.get("Enf").toString().replace("_", " ");
             String cat = solucion.get("Cat").toString().replace("_", "/");
             String rec = solucion.get("Rec").toString();
@@ -154,11 +72,10 @@ public void cargarBaseConocimiento() {
             resultadoFinal.append("Recomendación: ").append(rec).append("\n\n");
             
             encontrado = true;
-<<<<<<< Updated upstream
+
             
             // 4. Almacenar en Historial (TAREA 3)
-=======
->>>>>>> Stashed changes
+
             guardarHistorial(paciente.getNombre(), paciente.getEdad(), enf, cat); 
         }
         
@@ -171,10 +88,8 @@ public void cargarBaseConocimiento() {
     }
 
     /**
-<<<<<<< Updated upstream
      * TAREA 3.a: Almacenar los diagnósticos realizados en la base de datos relacional.
-     */
-=======
+     *
      * Nuevo método para exportar los resultados a CSV.
      */
     public boolean exportarDiagnosticoCSV(Paciente paciente, List<String> sintomasPaciente, File archivoDestino) {
@@ -225,7 +140,6 @@ public void cargarBaseConocimiento() {
         }
     }
 
->>>>>>> Stashed changes
     public void guardarHistorial(String paciente, int edad, String enfermedad, String categoria) {
     
         ConexionBD conexion = new ConexionBD();
@@ -275,13 +189,11 @@ public void cargarBaseConocimiento() {
         q.close();
         return sb.toString();
     }
-<<<<<<< Updated upstream
     
     /**
      * TAREA 2.c: Implementa el filtro 'enfermedades_cronicas'.
      * @return String con el listado de todas las enfermedades crónicas.
      */
-=======
 
     
     public List<models.Diagnostico> obtenerDiagnosticosFiltrados(List<String> sintomasPaciente, String categoriaFiltro) {
@@ -324,7 +236,6 @@ public void cargarBaseConocimiento() {
     return resultados;
 }
     
->>>>>>> Stashed changes
     public String obtenerEnfermedadesCronicas() {
         // Definir la consulta a Prolog (usa la regla estática)
         String consulta = "enfermedades_cronicas(Enf, Cat, Rec)";

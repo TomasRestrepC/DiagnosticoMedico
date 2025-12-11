@@ -7,18 +7,15 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JCheckBox;
-<<<<<<< Updated upstream
 import controlador.GestorDiagnostico;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-=======
 import javax.swing.JOptionPane;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JFileChooser;
 import java.io.File;
 import java.awt.Component;
->>>>>>> Stashed changes
 
 import controlador.GestorDiagnostico;
 import controlador.GestorSintoma;
@@ -128,6 +125,7 @@ public class JFSintomas extends javax.swing.JFrame {
         panelSintomas = new javax.swing.JScrollPane();
         btnDiagnosticar = new javax.swing.JButton();
         btnExportarCSV = new javax.swing.JButton();
+        Regresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -140,31 +138,38 @@ public class JFSintomas extends javax.swing.JFrame {
         btnExportarCSV.setText("Exportar");
         btnExportarCSV.addActionListener(this::btnExportarCSVActionPerformed);
 
+        Regresar.setText("Regresar");
+        Regresar.addActionListener(this::RegresarActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(107, 107, 107)
-                .addComponent(jLabel1)
-                .addContainerGap(106, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelSintomas)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnExportarCSV)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnDiagnosticar)
-                .addGap(36, 36, 36))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Regresar)
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel1)
+                        .addContainerGap(105, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(panelSintomas)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnExportarCSV)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDiagnosticar)
+                        .addGap(36, 36, 36))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(Regresar))
+                .addGap(22, 22, 22)
                 .addComponent(panelSintomas, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -198,11 +203,11 @@ public class JFSintomas extends javax.swing.JFrame {
         }
         
         GestorDiagnostico gestor = new GestorDiagnostico(); 
-<<<<<<< Updated upstream
         
-        gestor.cargarBaseConocimiento(); 
-=======
->>>>>>> Stashed changes
+        prolog.Prolog pl = new Prolog();
+        pl.cargarBaseConocimiento(); 
+        
+
         
         // Asegurar que la base de conocimiento está cargada
         // (Si usas la clase Prolog.java para esto, llámala, si no, GestorDiagnostico debería encargarse)
@@ -262,6 +267,11 @@ public class JFSintomas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnExportarCSVActionPerformed
 
+    private void RegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegresarActionPerformed
+        new JFUsuario().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_RegresarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -288,6 +298,7 @@ public class JFSintomas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Regresar;
     private javax.swing.JButton btnDiagnosticar;
     private javax.swing.JButton btnExportarCSV;
     private javax.swing.JLabel jLabel1;

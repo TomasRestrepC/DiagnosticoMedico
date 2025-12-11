@@ -16,7 +16,7 @@ import org.jpl7.Query;
  * @author smuel
  */
 public class Prolog {
-    private static final String RUTA_PROLOG = "src/reglas.pl";
+    public static final String RUTA_PROLOG = "src/reglas.pl";
 
  public void cargarBaseConocimiento() {
     ConexionBD conexion = new ConexionBD();
