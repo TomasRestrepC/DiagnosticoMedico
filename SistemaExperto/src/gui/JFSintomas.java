@@ -10,23 +10,32 @@ import javax.swing.JCheckBox;
 import controlador.GestorDiagnostico;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-import prolog.Prolog;
+import javax.swing.JOptionPane;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import javax.swing.JFileChooser;
+import java.io.File;
+import java.awt.Component;
 
+import controlador.GestorDiagnostico;
+import controlador.GestorSintoma;
+import models.Paciente;
+import prolog.Prolog;
 /**
  *
  * @author smuel
  */
 public class JFSintomas extends javax.swing.JFrame {
     
-private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFSintomas.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFSintomas.class.getName());
     private String nombrePaciente;
     private int edadPaciente;
-    private List<JCheckBox> listaCheckBoxes = new ArrayList<>();
+    
+    // Lista dinámica para guardar las referencias a los checkboxes generados
+    private List<JCheckBox> listaCheckBoxesGenerados = new ArrayList<>();
+
+    // Componentes manuales
     private javax.swing.JPanel panelCheckboxes; 
-    private javax.swing.JCheckBox chkFiebre;
-    private javax.swing.JCheckBox chkTos;
-    private javax.swing.JCheckBox chkDolorCabeza;
-    private javax.swing.JCheckBox chkErupcion;
     private javax.swing.JTextArea txtAreaResultados; 
     private javax.swing.JScrollPane scrollResultados;
     
@@ -35,34 +44,52 @@ private static final java.util.logging.Logger logger = java.util.logging.Logger.
         inicializarComponentesPersonalizados();
     }
     public JFSintomas(String nombre, int edad) {
-        initComponents();
-        inicializarComponentesPersonalizados();
+        initComponents();        
         this.nombrePaciente = nombre;
         this.edadPaciente = edad;
-
+        inicializarComponentesPersonalizados();
         // cargarSintomas();
     }
     
     private void inicializarComponentesPersonalizados() {
         
-        // --- 1. Inicializar Checkboxes ---
-        chkFiebre = new javax.swing.JCheckBox("Fiebre");
-        chkTos = new javax.swing.JCheckBox("Tos");
-        chkDolorCabeza = new javax.swing.JCheckBox("Dolor de Cabeza");
-        chkErupcion = new javax.swing.JCheckBox("Erupción");
+        // --- 1. Crear Panel Contenedor de Síntomas ---
+        panelCheckboxes = new JPanel();
+        panelCheckboxes.setLayout(new BoxLayout(panelCheckboxes, BoxLayout.Y_AXIS)); 
         
-        // Almacenar en la lista para futuras extensiones (opcional)
-        listaCheckBoxes.add(chkFiebre);
-        listaCheckBoxes.add(chkTos);
-        listaCheckBoxes.add(chkDolorCabeza);
-        listaCheckBoxes.add(chkErupcion);
+        // --- 2. Cargar Síntomas Dinámicamente desde la BD ---
+        GestorSintoma gestorSintoma = new GestorSintoma();
+        List<String> sintomasBD = gestorSintoma.obtenerTodosLosSintomas();
+        
+        if (sintomasBD.isEmpty()) {
+            panelCheckboxes.add(new javax.swing.JLabel("No hay síntomas cargados en la base de datos."));
+        } else {
+            for (String sintoma : sintomasBD) {
+                // Crear un checkbox por cada síntoma
+                // 'sintoma' viene legible (ej: "dolor de cabeza")
+                JCheckBox chk = new JCheckBox(sintoma);
+                listaCheckBoxesGenerados.add(chk); // Guardarlo en la lista para revisarlo luego
+                panelCheckboxes.add(chk);          // Añadirlo visualmente
+            }
+        }
+        
+        // Establecer el panel dentro del ScrollPane
+        panelSintomas.setViewportView(panelCheckboxes);
+        
+        // --- 3. Inicializar Área de Resultados ---
+        txtAreaResultados = new javax.swing.JTextArea();
+        scrollResultados = new javax.swing.JScrollPane();
+        txtAreaResultados.setColumns(20);
+        txtAreaResultados.setRows(5);
+        txtAreaResultados.setEditable(false);
+        scrollResultados.setViewportView(txtAreaResultados);
         
         // --- 2. Crear Panel Contenedor de Síntomas ---
         panelCheckboxes = new JPanel();
         panelCheckboxes.setLayout(new BoxLayout(panelCheckboxes, BoxLayout.Y_AXIS)); // Layout Vertical
         
         // Agregar los checkboxes al panel
-        for (JCheckBox chk : listaCheckBoxes) {
+        for (JCheckBox chk : listaCheckBoxesGenerados) {
             panelCheckboxes.add(chk);
         }
         
@@ -79,6 +106,8 @@ private static final java.util.logging.Logger logger = java.util.logging.Logger.
         txtAreaResultados.setEditable(false);
         scrollResultados.setViewportView(txtAreaResultados);
         
+        btnExportarCSV = new javax.swing.JButton("Exportar a CSV");
+        btnExportarCSV.addActionListener(evt -> btnExportarCSVActionPerformed(evt));
         // Añadir el scrollResultados al layout de la ventana
 
     }
@@ -95,6 +124,8 @@ private static final java.util.logging.Logger logger = java.util.logging.Logger.
         jLabel1 = new javax.swing.JLabel();
         panelSintomas = new javax.swing.JScrollPane();
         btnDiagnosticar = new javax.swing.JButton();
+        btnExportarCSV = new javax.swing.JButton();
+        Regresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,32 +135,46 @@ private static final java.util.logging.Logger logger = java.util.logging.Logger.
         btnDiagnosticar.setText("Diagnosticar");
         btnDiagnosticar.addActionListener(this::btnDiagnosticarActionPerformed);
 
+        btnExportarCSV.setText("Exportar");
+        btnExportarCSV.addActionListener(this::btnExportarCSVActionPerformed);
+
+        Regresar.setText("Regresar");
+        Regresar.addActionListener(this::RegresarActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(107, 107, 107)
-                .addComponent(jLabel1)
-                .addContainerGap(106, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelSintomas)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnDiagnosticar)
-                .addGap(36, 36, 36))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Regresar)
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel1)
+                        .addContainerGap(105, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(panelSintomas)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnExportarCSV)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDiagnosticar)
+                        .addGap(36, 36, 36))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(Regresar))
+                .addGap(22, 22, 22)
                 .addComponent(panelSintomas, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnDiagnosticar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDiagnosticar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnExportarCSV))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
@@ -137,38 +182,95 @@ private static final java.util.logging.Logger logger = java.util.logging.Logger.
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDiagnosticarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDiagnosticarActionPerformed
-        // --- TAREA 1: Ingreso de información del paciente (Recolección) ---
         int id = 1; 
         models.Paciente paciente = new models.Paciente(id, this.nombrePaciente, this.edadPaciente);
         
-        // --- TAREA 1: Permitir seleccionar los síntomas (Recolección) ---
-        List<String> sintomasSeleccionados = new java.util.ArrayList<>();
+        List<String> sintomasSeleccionados = new ArrayList<>();
         
-        // **RECOLECCIÓN DE SÍNTOMAS:** Los nombres deben coincidir con la BD (minúsculas, guiones bajos)
-        if (chkFiebre.isSelected()) {
-            sintomasSeleccionados.add("fiebre");
-        }
-        if (chkTos.isSelected()) {
-            sintomasSeleccionados.add("tos");
-        }
-        if (chkDolorCabeza.isSelected()) {
-            sintomasSeleccionados.add("dolor_cabeza");
-        }
-        if (chkErupcion.isSelected()) {
-            sintomasSeleccionados.add("erupcion");
+        // Recorrer los checkboxes dinámicos
+        for (JCheckBox chk : listaCheckBoxesGenerados) {
+            if (chk.isSelected()) {
+                // Convertir el texto legible a formato Prolog (snake_case)
+                // Ej: "Dolor de Cabeza" -> "dolor_de_cabeza"
+                String sintomaProlog = chk.getText().toLowerCase().replace(" ", "_");
+                sintomasSeleccionados.add(sintomaProlog);
+            }
         }
         
-        // --- TAREA 2: Generación de Diagnóstico (Llamada a la lógica) ---
+        if (sintomasSeleccionados.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Seleccione al menos un síntoma.");
+            return;
+        }
+        
         GestorDiagnostico gestor = new GestorDiagnostico(); 
-        prolog.Prolog pl = new Prolog(); 
+        
+        prolog.Prolog pl = new Prolog();
         pl.cargarBaseConocimiento(); 
         
-        // Obtener el diagnóstico (Llama a guardarHistorial internamente - Tarea 3)
-        String resultado = gestor.obtenerDiagnostico(paciente, sintomasSeleccionados);
+
         
-        // Mostrar el resultado en el JTextArea
+        // Asegurar que la base de conocimiento está cargada
+        // (Si usas la clase Prolog.java para esto, llámala, si no, GestorDiagnostico debería encargarse)
+        // gestor.cargarBaseConocimiento(); // Si tienes este método
+        
+        // Obtener y mostrar diagnóstico
+        String resultado = gestor.obtenerDiagnostico(paciente, sintomasSeleccionados);
         txtAreaResultados.setText(resultado);
+        
+        // Mostrar el scroll de resultados si estaba oculto
+        if (scrollResultados.getParent() == null) {
+             // Lógica simple para añadirlo al final si no estaba en el diseño
+             javax.swing.GroupLayout layout = (javax.swing.GroupLayout) getContentPane().getLayout();
+             // (Ajustar layout programáticamente es complejo, mejor agrégalo en el DESIGN)
+             JOptionPane.showMessageDialog(this, resultado, "Diagnóstico", JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnDiagnosticarActionPerformed
+
+    private void btnExportarCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarCSVActionPerformed
+        if (txtAreaResultados.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Primero debe realizar un diagnóstico.");
+            return;
+        }
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar Diagnóstico como CSV");
+        fileChooser.setSelectedFile(new File("diagnostico.csv"));
+        
+        int userSelection = fileChooser.showSaveDialog(this);
+        
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            // Asegurar extensión .csv
+            if (!fileToSave.getAbsolutePath().endsWith(".csv")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".csv");
+            }
+            
+            // Recolectar datos nuevamente para exportar
+            int id = 1;
+            models.Paciente paciente = new models.Paciente(id, this.nombrePaciente, this.edadPaciente);
+            List<String> sintomasSeleccionados = new ArrayList<>();
+            for (JCheckBox chk : listaCheckBoxesGenerados) {
+                if (chk.isSelected()) {
+                    sintomasSeleccionados.add(chk.getText().toLowerCase().replace(" ", "_"));
+                }
+            }
+            
+            GestorDiagnostico gestor = new GestorDiagnostico();
+            boolean exito = gestor.exportarDiagnosticoCSV(paciente, sintomasSeleccionados, fileToSave);
+            
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Archivo guardado exitosamente en:\n" + fileToSave.getAbsolutePath());
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar el archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnExportarCSVActionPerformed
+
+    private void RegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegresarActionPerformed
+        new JFUsuario().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_RegresarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -196,7 +298,9 @@ private static final java.util.logging.Logger logger = java.util.logging.Logger.
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Regresar;
     private javax.swing.JButton btnDiagnosticar;
+    private javax.swing.JButton btnExportarCSV;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane panelSintomas;
     // End of variables declaration//GEN-END:variables

@@ -19,6 +19,10 @@ public class Diagnostico {
         this.recomendacion = recomendacion;
     }
 
+    public Diagnostico(String enf, String cat, String rec, double d) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public String getEnfermedad() {
         return enfermedad;
     }
