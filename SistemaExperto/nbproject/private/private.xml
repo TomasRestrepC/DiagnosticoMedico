@@ -3,19 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/controlador/GestorDiagnostico.java</file>
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/reglas.pl</file>
-<<<<<<< Updated upstream
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/controlador/ConexionBD.java</file>
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/models/Enfermedad.java</file>
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/gui/JFSintomas.java</file>
-=======
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/prolog/Prolog.java</file>
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/models/Enfermedad.java</file>
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/gui/JFSintomas.java</file>
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/database/ConexionBD.java</file>
->>>>>>> Stashed changes
-            <file>file:/C:/Users/tomas/OneDrive/Escritorio/DiagnosticoMedico/SistemaExperto/src/gui/JFInicio.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/gui/JFInicio.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/controlador/GestorDiagnostico.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/controlador/GestorEnfermedad.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/reglas.pl</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/gui/JFEnfermedades.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/gui/JFAgregarEnfermedad.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/database/ConexionBD.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/controlador/GestorSintoma.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/gui/JFAgregarSintoma.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/prolog/Prolog.java</file>
+            <file>file:/C:/Users/smuel/Escritorio/prolog/DiagnosticoMedico/SistemaExperto/src/gui/JFSintomas.java</file>
         </group>
     </open-files>
 </project-private>

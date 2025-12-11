@@ -18,7 +18,8 @@ import java.util.List;
 public class GestorSintoma {
     
 public List<String> obtenerTodosLosSintomas() {
-    java.util.Set<String> set = new java.util.LinkedHashSet<>();
+    java.util.Set<String> set = new java.util.LinkedHashSet<>(); // no permite elementos duplicados.
+    
 
     org.jpl7.Query q = new org.jpl7.Query("sintoma_de(_, S)");
 

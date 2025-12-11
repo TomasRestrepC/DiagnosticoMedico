@@ -46,7 +46,6 @@ public class JFSintomas extends javax.swing.JFrame {
         
         panelCheckboxes = new JPanel();
         panelCheckboxes.setLayout(new BoxLayout(panelCheckboxes, BoxLayout.Y_AXIS)); 
-
         GestorSintoma gestorSintoma = new GestorSintoma();
         List<String> sintomasBD = gestorSintoma.obtenerTodosLosSintomas();
         
@@ -168,8 +167,6 @@ public class JFSintomas extends javax.swing.JFrame {
         // Recorrer los checkboxes dinámicos
         for (JCheckBox chk : listaCheckBoxesGenerados) {
             if (chk.isSelected()) {
-                // Convertir el texto legible a formato Prolog (snake_case)
-                // Ej: "Dolor de Cabeza" -> "dolor_de_cabeza"
                 String sintomaProlog = chk.getText().toLowerCase().replace(" ", "_");
                 sintomasSeleccionados.add(sintomaProlog);
             }
@@ -189,7 +186,7 @@ public class JFSintomas extends javax.swing.JFrame {
         String resultado = gestor.obtenerDiagnostico(paciente, sintomasSeleccionados);
         txtAreaResultados.setText(resultado);
         
-        // Mostrar el scroll de resultados si estaba oculto
+
         if (scrollResultados.getParent() == null) {
              javax.swing.GroupLayout layout = (javax.swing.GroupLayout) getContentPane().getLayout();
              JOptionPane.showMessageDialog(this, resultado, "Diagnóstico", JOptionPane.INFORMATION_MESSAGE);
@@ -211,7 +208,6 @@ public class JFSintomas extends javax.swing.JFrame {
         
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            // Asegurar extensión .csv
             if (!fileToSave.getAbsolutePath().endsWith(".csv")) {
                 fileToSave = new File(fileToSave.getAbsolutePath() + ".csv");
             }
