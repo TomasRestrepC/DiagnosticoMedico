@@ -26,7 +26,7 @@ public class Prolog {
         Query qConsult = new Query("consult('" + RUTA_PROLOG + "')");
         qConsult.hasSolution();
         
-        // 2. Limpiar la memoria dinámica de Prolog antes de cargar nuevos datos
+        // Limpiar la memoria dinámica de Prolog antes de cargar nuevos datos
         new Query("limpiar_conocimiento").hasSolution();
 
         System.out.println("DEBUG: Iniciando carga de BC desde MySQL...");

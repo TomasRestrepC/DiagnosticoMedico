@@ -15,6 +15,7 @@ import org.jpl7.Term;
 import models.Paciente; 
 
 public class GestorDiagnostico {
+        
     public String obtenerDiagnostico(Paciente paciente, List<String> sintomasPaciente) {
         String listaProlog = "[" + String.join(",", sintomasPaciente) + "]";
         String consulta = String.format("diagnostico(Enf, Cat, Rec, %s)", listaProlog);
@@ -29,7 +30,7 @@ public class GestorDiagnostico {
 
         while (q.hasMoreSolutions()) {
             Map<String, Term> solucion = q.nextSolution();
-            
+
             String enf = solucion.get("Enf").toString().replace("_", " ");
             String cat = solucion.get("Cat").toString().replace("_", "/");
             String rec = solucion.get("Rec").toString();
@@ -57,7 +58,6 @@ public class GestorDiagnostico {
         Query q = new Query(consulta);
         
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoDestino))) {
-        
             writer.write("Nombre Paciente,Edad,Enfermedad Diagnosticada,Categoria,Recomendacion");
             writer.newLine();
             
@@ -68,15 +68,14 @@ public class GestorDiagnostico {
                 
                 String enf = solucion.get("Enf").toString().replace("_", " ");
                 String cat = solucion.get("Cat").toString().replace("_", "/");
-                String rec = solucion.get("Rec").toString().replace("_", " "); // Limpiar guiones bajos
-                
-                // Formato CSV: "Nombre,Edad,Enfermedad,Categoria,Recomendacion"
+                String rec = solucion.get("Rec").toString().replace("_", " ");
+
                 String linea = String.format("%s,%d,%s,%s,%s", 
                         paciente.getNombre(),
                         paciente.getEdad(),
                         enf,
                         cat,
-                        rec.replace(",", ";")
+                        rec.replace(",", ";") 
                 );
                 
                 writer.write(linea);
@@ -113,13 +112,10 @@ public class GestorDiagnostico {
             System.err.println("Error al guardar historial: " + e.getMessage());
         }
     }
-    
- 
 
     public String obtenerDiagnosticosPorCategoria(String categoria) {
     
-        String catProlog = categoria.toLowerCase().replace(" ", "_").replace("/", "_");
-        
+        String catProlog = categoria.toLowerCase().replace(" ", "_").replace("/", "_");       
         // Definir la consulta a Prolog
         String consulta = String.format("diagnostico_categoria(Enf, '%s', Rec)", catProlog);
         Query q = new Query(consulta);
@@ -143,15 +139,14 @@ public class GestorDiagnostico {
         q.close();
         return sb.toString();
     }
-
+    
     public List<models.Diagnostico> obtenerDiagnosticosFiltrados(List<String> sintomasPaciente, String categoriaFiltro) {
     
     List<models.Diagnostico> resultados = new ArrayList<>();
     
     String listaProlog = "[" + String.join(",", sintomasPaciente) + "]";
-    
-    String catFiltroProlog = categoriaFiltro.toLowerCase().replace(" ", "_").replace("/", "_");
 
+    String catFiltroProlog = categoriaFiltro.toLowerCase().replace(" ", "_").replace("/", "_");
 
     String consulta = String.format("diagnostico_filtrado(Enf, Cat, Rec, %s, '%s')", 
                                     listaProlog, catFiltroProlog);
@@ -162,11 +157,11 @@ public class GestorDiagnostico {
     try {
         while (q.hasMoreSolutions()) {
             Map<String, Term> solucion = q.nextSolution();
-            
+
             String enf = solucion.get("Enf").toString().replace("_", " ");
             String cat = solucion.get("Cat").toString().replace("_", "/");
             String rec = solucion.get("Rec").toString();
-            
+
             models.Diagnostico diagnostico = new models.Diagnostico(enf, cat, rec, 0.0);
             resultados.add(diagnostico);
         }
@@ -204,7 +199,7 @@ public class GestorDiagnostico {
     public String consultarHistorialPaciente(String nombrePaciente) {
         ConexionBD conexion = new ConexionBD();
         StringBuilder sb = new StringBuilder();
-        // Se usa LIKE ? para permitir la búsqueda parcial o tolerar errores
+        
         String sql = "SELECT fecha, enfermedad_diagnosticada, categoria FROM historial_pacientes WHERE nombre_paciente LIKE ?";
         
         sb.append("--- Historial de ").append(nombrePaciente).append(" ---\n");
@@ -231,12 +226,11 @@ public class GestorDiagnostico {
         }
         return sb.toString();
     }
-
+    
     public String enfermedadesMasComunes() {
         ConexionBD conexion = new ConexionBD();
         StringBuilder sb = new StringBuilder();
         
-        // Consulta para contar y ordenar las enfermedades más frecuentes
         String sql = "SELECT enfermedad_diagnosticada, COUNT(*) AS total FROM historial_pacientes GROUP BY enfermedad_diagnosticada ORDER BY total DESC LIMIT 5";
         
         sb.append("--- Top 5 Enfermedades Más Comunes ---\n");
@@ -260,6 +254,5 @@ public class GestorDiagnostico {
             return "Error al generar estadísticas: " + e.getMessage();
         }
         return sb.toString();
-    }
-    
+    } 
 }

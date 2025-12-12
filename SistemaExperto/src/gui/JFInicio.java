@@ -4,7 +4,6 @@
  */
 package gui;
 
-import controlador.GestorDiagnostico;
 import prolog.Prolog;
 
 /**
@@ -46,6 +45,8 @@ public class JFInicio extends javax.swing.JFrame {
         btnConsultarEnfermedades = new javax.swing.JButton();
         btnAgregarEnfermedad = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        btnEstadisticas = new javax.swing.JButton();
+        btnHistorial = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,18 +71,20 @@ public class JFInicio extends javax.swing.JFrame {
         btnSalir.setText("Salir");
         btnSalir.addActionListener(this::btnSalirActionPerformed);
 
+        btnEstadisticas.setText("Estadisticas");
+        btnEstadisticas.addActionListener(this::btnEstadisticasActionPerformed);
+
+        btnHistorial.setText("Historial");
+        btnHistorial.addActionListener(this::btnHistorialActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSalir)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(123, 123, 123)
-                                .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(252, 252, 252)
                                 .addComponent(jLabel2))
@@ -96,8 +99,18 @@ public class JFInicio extends javax.swing.JFrame {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel3)
                                         .addGap(44, 44, 44)))))
-                        .addGap(119, 119, 119)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnEstadisticas)
+                            .addComponent(btnHistorial)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(123, 123, 123)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnSalir)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(119, 119, 119)))))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -108,17 +121,24 @@ public class JFInicio extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(14, 14, 14)
                 .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addComponent(btnAgregarUsuario)
-                .addGap(18, 18, 18)
-                .addComponent(btnConsultarEnfermedades)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAgregarUsuario)
+                    .addComponent(btnEstadisticas))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnConsultarEnfermedades))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(btnHistorial)))
                 .addGap(18, 18, 18)
                 .addComponent(btnAgregarEnfermedad)
                 .addGap(18, 18, 18)
                 .addComponent(btnAgregarSintoma)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSalir)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -147,6 +167,16 @@ public class JFInicio extends javax.swing.JFrame {
         new JFAgregarSintoma().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnAgregarSintomaActionPerformed
+
+    private void btnHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistorialActionPerformed
+        new JFHistorial().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnHistorialActionPerformed
+
+    private void btnEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEstadisticasActionPerformed
+        new JFEstadisticas().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnEstadisticasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,6 +208,8 @@ public class JFInicio extends javax.swing.JFrame {
     private javax.swing.JButton btnAgregarSintoma;
     private javax.swing.JButton btnAgregarUsuario;
     private javax.swing.JButton btnConsultarEnfermedades;
+    private javax.swing.JButton btnEstadisticas;
+    private javax.swing.JButton btnHistorial;
     private javax.swing.JButton btnSalir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

@@ -1,0 +1,5 @@
+Nombre Paciente,Edad,Enfermedad Diagnosticada,Categoria,Recomendacion
+samuel s,22,gripe,viral,'Descansar  hidratar  consultar médico'
+samuel s,22,resfriado,viral,'Descansar  hidratar'
+samuel s,22,'covid-19',viral,'Aislamiento  consultar médico'
+samuel s,22,faringitis,viral/bacteriana,'Consultar médico'
